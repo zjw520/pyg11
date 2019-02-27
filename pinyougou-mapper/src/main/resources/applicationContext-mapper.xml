@@ -23,8 +23,8 @@
     </bean>
 
     <!--配置数据访问接口的代理对象-->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.pinyougou.service"/>
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.pinyougou.mapper"/>
     </bean>
 
     <!--配置数据源事务管理器-->
