@@ -5,4 +5,17 @@
 
 <mapper namespace="com.pinyougou.mapper.BrandMapper">
 
+	<select id="findAll" resultType="Brand">
+		select * from tb_brand
+		<where>
+			<if test="name !=null and name !=''">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="firstChar!=null and firstChar != ''">
+				and first_char = #{firstChar}
+			</if>
+		</where>
+		order by id asc
+	</select>
+
 </mapper>

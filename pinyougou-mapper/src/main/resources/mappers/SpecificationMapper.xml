@@ -5,4 +5,15 @@
 
 <mapper namespace="com.pinyougou.mapper.SpecificationMapper">
 
+	<select id="findAll" resultType="Specification">
+		select * from tb_specification
+		<where>
+			<if test="specName!=null and specName!=''">
+				spec_name like CONCAT('%',#{specName},'%')
+			</if>
+		</where>
+		order by id asc
+	</select>
+
+
 </mapper>
