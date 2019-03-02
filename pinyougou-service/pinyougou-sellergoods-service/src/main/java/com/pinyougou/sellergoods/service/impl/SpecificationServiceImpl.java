@@ -19,6 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * SpecificationServiceImpl 服务接口实现类
@@ -146,6 +147,15 @@ public class SpecificationServiceImpl implements SpecificationService {
             SpecificationOption so = new SpecificationOption();
             so.setSpecId(id);
             return specificationOptionMapper.select(so);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllByIdAndName() {
+        try {
+            return specificationMapper.findAllByIdAndName();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

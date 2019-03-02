@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/brand")
@@ -67,5 +68,11 @@ public class BrandController {
         return brandService.findByPage(brand, page, rows);
 
     }
+
+    @GetMapping("/findBrandList")
+    public List<Map<String, Object>> findBrandList(){
+        return brandService.findAllByIdAndName();
+    }
+
 
 }

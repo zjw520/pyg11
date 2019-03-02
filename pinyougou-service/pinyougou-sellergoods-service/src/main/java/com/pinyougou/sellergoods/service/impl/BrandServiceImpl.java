@@ -17,6 +17,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * BrandServiceImpl 服务接口实现类
@@ -71,7 +72,7 @@ public class BrandServiceImpl implements BrandService {
     public void deleteAll(Serializable[] ids) {
         Example example = new Example(Brand.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andIn("id",Arrays.asList(ids));
+        criteria.andIn("id", Arrays.asList(ids));
         brandMapper.deleteByExample(example);
     }
 
@@ -105,6 +106,15 @@ public class BrandServiceImpl implements BrandService {
             PageInfo<Brand> pageInfo = PageHelper.startPage(page, rows)
                     .doSelectPageInfo(() -> brandMapper.findAll(brand));
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllByIdAndName() {
+        try {
+            return brandMapper.findAllByIdAndName();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

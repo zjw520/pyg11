@@ -6,6 +6,8 @@ import com.pinyougou.pojo.SpecificationOption;
 
 import java.util.List;
 import java.io.Serializable;
+import java.util.Map;
+
 /**
  * SpecificationService 服务接口
  * @date 2019-02-27 16:23:07
@@ -35,4 +37,6 @@ public interface SpecificationService {
 	PageResult findByPage(Specification specification, int page, int rows);
 
     List<SpecificationOption> findSpecOption(Long id);
+
+    List<Map<String, Object>> findAllByIdAndName();
 }
