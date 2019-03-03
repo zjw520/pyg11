@@ -5,4 +5,19 @@
 
 <mapper namespace="com.pinyougou.mapper.SellerMapper">
 
+	<select id="findAll" resultType="Seller">
+		select * from tb_seller
+	  	<where>
+			<if test="status != null and status != ''">
+				and status=#{status}
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="nickName != null and nickName != ''">
+				and name like CONCAT('%',#{nickName},'%')
+			</if>
+
+		</where>
+	</select>
 </mapper>
