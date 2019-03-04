@@ -1,4 +1,4 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.common.pojo.PageResult;
@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/typeTemplate")
 public class TypeTemplateController {
-    @Reference
+    @Reference(timeout = 10000)
     TypeTemplateService typeTemplateService;
 
     @GetMapping("/findByPage")
@@ -69,7 +69,8 @@ public class TypeTemplateController {
 
     @GetMapping("/findOne")
     public TypeTemplate findOne(Long id) {
-        return typeTemplateService.findOne(id);
+        TypeTemplate one = typeTemplateService.findOne(id);
+        return one;
     }
 
 

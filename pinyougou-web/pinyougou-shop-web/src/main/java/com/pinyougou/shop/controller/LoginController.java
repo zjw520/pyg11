@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @ResponseBody
     @GetMapping("/showLoginName")
     public Map<String, String> showLoginName() {
         String loginName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -30,27 +32,29 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String login(String username, String password, String code,
-                        HttpServletRequest request, HttpServletResponse response){
-        System.out.println("username:" + username);
-        System.out.println("password:" + password);
-        System.out.println("code:" + code);
-        // 判断验证码
-        String oldCode = (String)request.getSession().getAttribute(VerifyController.VERIFY_CODE);
-        if (code.equalsIgnoreCase(oldCode)){
-            // 创建用户名与密码对象
-            UsernamePasswordAuthenticationToken token =
-                    new UsernamePasswordAuthenticationToken(username, password);
-            // 登录认证(Spring Security)
-            Authentication authenticate = authenticationManager.authenticate(token);
-            // 判断认证是否成功
-            if (authenticate.isAuthenticated()){
-                // 认证成功
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authenticate);
-                return "redirect:/admin/index.html";
+                        HttpServletRequest request) {
+
+
+            System.out.println("username:" + username);
+            System.out.println("password:" + password);
+            System.out.println("code:" + code);
+            // 判断验证码
+            String oldCode = (String) request.getSession().getAttribute(VerifyController.VERIFY_CODE);
+            if (!code.equals("") && code.equalsIgnoreCase(oldCode)) {
+                // 创建用户名与密码对象
+                UsernamePasswordAuthenticationToken token =
+                        new UsernamePasswordAuthenticationToken(username, password);
+                // 登录认证(Spring Security)
+                Authentication authenticate = authenticationManager.authenticate(token);
+                // 判断认证是否成功
+                if (authenticate.isAuthenticated()) {
+                    // 认证成功
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(authenticate);
+                    return "redirect:/admin/index.html";
+                }
             }
-        }
-        return  "redirect:/shoplogin.html";
+        return "redirect:/shoplogin.html";
     }
 
 }
