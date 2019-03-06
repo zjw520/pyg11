@@ -21,4 +21,7 @@ public interface TypeTemplateMapper extends Mapper<TypeTemplate>{
 
     @Select("select id, name as text from tb_type_template")
     List<Map<String, Object>> findAllByIdAndName();
+
+
+    List<Map> findSpecByTemplateId(Long id);
 }

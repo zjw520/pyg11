@@ -68,16 +68,20 @@ app.controller('goodsController', function ($scope, $controller, baseService) {
         ) {
             if (response.data.status == 200) {
                 $scope.picEntity.url = response.data.url;
+
             } else {
                 alert("图片上传失败")
             }
         })
     }
 
-    $scope.goods = {goodsDesc: {itemImages: []}}
+    $scope.goods = {goodsDesc: {itemImages: [], specificationItems: []}}
 
     $scope.addPic = function () {
         $scope.goods.goodsDesc.itemImages.push($scope.picEntity)
+
+        var test = document.getElementById('file');
+        test.value = '';
     }
 
     $scope.removePic = function (idx) {
@@ -125,8 +129,69 @@ app.controller('goodsController', function ($scope, $controller, baseService) {
                 $scope.brandIds = JSON.parse(response.data.brandIds);
                 $scope.goods.goodsDesc.customAttributeItems = JSON.parse(response.data.customAttributeItems);
             })
+
+            baseService.sendGet("/typeTemplate/findSpecByTemplateId?id=" + newVal).then(function (response) {
+                $scope.specList = response.data;
+            })
         }
     })
+
+    $scope.updateSpecAttr = function (e, specName, optionName) {
+        var obj = $scope.searchJsonByKey($scope.goods.goodsDesc.specificationItems, 'attributeName', specName);
+        if (obj) {
+            if (e.target.checked) {
+                obj.attributeValue.push(optionName)
+            } else {
+                var idx = obj.attributeValue.indexOf(optionName);
+                obj.attributeValue.splice(idx, 1);
+                if (obj.attributeValue.length == 0) {
+                    $scope.goods.goodsDesc.specificationItems.splice(
+                        $scope.goods.goodsDesc.specificationItems.indexOf(obj), 1)
+                }
+            }
+        } else {
+            $scope.goods.goodsDesc.specificationItems.push(
+                {"attributeName": specName, "attributeValue": [optionName]}
+            )
+        }
+    }
+
+    $scope.searchJsonByKey = function (jsonArr, key, value) {
+        for (var i = 0; i < jsonArr.length; i++) {
+            if (jsonArr[i][key] == value) {
+                return jsonArr[i]
+            }
+        }
+    }
+
+
+
+    //spec:网络 optionName:移动3G
+    $scope.createItems = function () {
+        $scope.goods.items = [{spec: {}, price: 0, num: 9999, status : '0', isDefault: '0'}]
+        var specItems = $scope.goods.goodsDesc.specificationItems;
+        for (i = 0; i < specItems.length; i++) {
+            var obj = specItems[i]
+            $scope.goods.items = $scope.swapItems($scope.goods.items, obj.attributeValue, obj.attributeName);
+        }
+
+
+    }
+
+    $scope.swapItems = function (items, attributeValue, attributeName) {
+        var newItems = new Array();
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            for (var j = 0; j < attributeValue.length; j++) {
+                var newItem = JSON.parse(JSON.stringify(item));
+                newItem.spec[attributeName] = attributeValue[j]
+                newItems.push(newItem);
+            }
+        }
+        return newItems;
+    }
+
+    $scope.status = ['未审核', '已审核', '审核未通过', '关闭']
 
 
 })

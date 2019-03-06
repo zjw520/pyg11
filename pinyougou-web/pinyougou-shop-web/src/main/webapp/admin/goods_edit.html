@@ -31,12 +31,17 @@
             editor = K.create('textarea[name="content"]');
         });
     </script>
+
+    <script type="text/javascript">
+
+    </script>
     <link rel="stylesheet" href="../plugins/select2/select2.css">
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init
-="findItemCatByParentId(0,'itemCatList1')">
+        ="findItemCatByParentId(0,'itemCatList1')">
 <!-- 正文区域 -->
+{{goods}}
 <section class="content">
     <div class="box-body">
         <!--tab页-->
@@ -58,13 +63,16 @@
                         <div class="col-md-10 data">
                             <table>
                                 <tr>
-                                    <td><select class="form-control" ng-model="goods.category1Id" ng-options="i.id as i.name for i in itemCatList1" ng-change="change()">
+                                    <td><select class="form-control" ng-model="goods.category1Id"
+                                                ng-options="i.id as i.name for i in itemCatList1" ng-change="change()">
                                         <option value="">===请选择一级分类===</option>
                                     </select></td>
-                                    <td><select class="form-control select-sm" ng-model="goods.category2Id" ng-options="i.id as i.name for i in itemCatList2">
+                                    <td><select class="form-control select-sm" ng-model="goods.category2Id"
+                                                ng-options="i.id as i.name for i in itemCatList2">
                                         <option value="">===请选择二级分类===</option>
                                     </select></td>
-                                    <td><select class="form-control select-sm" ng-model="goods.category3Id" ng-options="i.id as i.name for i in itemCatList3">
+                                    <td><select class="form-control select-sm" ng-model="goods.category3Id"
+                                                ng-options="i.id as i.name for i in itemCatList3">
                                         <option value="">===请选择三级分类===</option>
                                     </select></td>
                                     <td ng-if="goods.typeTemplateId">模板ID:{{goods.typeTemplateId}}</td>
@@ -182,36 +190,25 @@
                     <div class="row data-type">
                         <div class="col-md-2 title">是否启用规格</div>
                         <div class="col-md-10 data">
-                            <input type="checkbox">
+                            <input type="checkbox" ng-model="goods.isEnableSpec" ng-true-value="1" ng-false-value="0">
                         </div>
                     </div>
                     <p>
-                    <div>
+                    <div ng-if="goods.isEnableSpec==1">
 
                         <div class="row data-type">
 
-                            <div>
-                                <div class="col-md-2 title">屏幕尺寸</div>
+                            <div ng-repeat="s in specList">
+                                <div class="col-md-2 title">{{s.text}}</div>
                                 <div class="col-md-10 data">
 	
-											<span> <input type="checkbox">4.0
-											</span> <span> <input type="checkbox">4.5
-											</span> <span> <input type="checkbox">5.0
+											<span ng-repeat="o in s.options"> <input type="checkbox"
+                                                                                     ng-click="updateSpecAttr($event,s.text,o.optionName);createItems()">{{o.optionName}}
 											</span>
 
                                 </div>
                             </div>
-                            <div>
-                                <div class="col-md-2 title">网络制式</div>
-                                <div class="col-md-10 data">
-	
-											<span> <input type="checkbox">2G
-											</span> <span> <input type="checkbox">3G
-											</span> <span> <input type="checkbox">4G
-											</span>
 
-                                </div>
-                            </div>
 
                         </div>
 
@@ -221,8 +218,9 @@
                                     class="table table-bordered table-striped table-hover dataTable">
                                 <thead>
                                 <tr>
-                                    <th class="sorting">屏幕尺寸</th>
-                                    <th class="sorting">网络制式</th>
+                                    <th class="sorting" ng-repeat="s in goods.goodsDesc.specificationItems">
+                                        {{s.attributeName}}
+                                    </th>
                                     <th class="sorting">价格</th>
                                     <th class="sorting">库存</th>
                                     <th class="sorting">是否启用</th>
@@ -230,48 +228,30 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>4.0</td>
-                                    <td>3G</td>
-                                    <td><input class="form-control" placeholder="价格">
+                                <tr ng-repeat="item in goods.items">
+                                    <td ng-repeat="s in goods.goodsDesc.specificationItems">
+                                        {{item.spec[s.attributeName]}}
                                     </td>
-                                    <td><input class="form-control" placeholder="库存数量">
+                                    <td><input class="form-control" placeholder="价格" ng-model="item.price">
                                     </td>
-                                    <td><input type="checkbox"></td>
-                                    <td><input type="checkbox"></td>
+                                    <td><input class="form-control" placeholder="库存数量" ng-model="item.num">
+                                    </td>
+                                    <td><input type="checkbox" ng-model="item.status" ng-true-value="1"
+                                               ng-false-value="0"></td>
+                                    <td><input type="checkbox" ng-model="item.isDefault" ng-true-value="1"
+                                               ng-false-value="0" onclick="checkDefault(this)"></td>
                                 </tr>
-                                <tr>
-                                    <td>4.0</td>
-                                    <td>4G</td>
-                                    <td><input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td><input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td><input type="checkbox"></td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>5.0</td>
-                                    <td>3G</td>
-                                    <td><input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td><input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td><input type="checkbox"></td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>5.0</td>
-                                    <td>4G</td>
-                                    <td><input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td><input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td><input type="checkbox"></td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-
                                 </tbody>
+                                <script>
+                                    checkDefault = function (obj) {
+                                        if ($(obj).prop('checked')) {
+                                            $("[ng-model='item.isDefault']").attr("disabled", true)
+                                            $(obj).attr("disabled", false);
+                                        }else{
+                                            $("[ng-model='item.isDefault']").attr("disabled", false)
+                                        }
+                                    }
+                                </script>
                             </table>
                         </div>
                     </div>

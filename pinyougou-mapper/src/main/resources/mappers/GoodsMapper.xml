@@ -5,4 +5,19 @@
 
 <mapper namespace="com.pinyougou.mapper.GoodsMapper">
 
+	<select id="findAll" resultType="map">
+		select id ,goods_name as goodsName,price,audit_status as auditStatus,category1_id as category1Id,category2_id as category2Id,category3_id as category3Id from tb_goods
+		<where>
+			<if test="sellerId != null and sellerId != ''">
+				and seller_id = #{sellerId}
+			</if>
+			<if test="goodsName != null and goodsName !=''">
+				and goods_name like concat('%',#{goodsName},'%')
+			</if>
+			<if test="auditStatus !=null and auditStatus != ''">
+				and audit_status = #{auditStatus}
+			</if>
+		</where>
+		order by id asc
+	</select>
 </mapper>

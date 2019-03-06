@@ -1,7 +1,10 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.pinyougou.common.pojo.PageResult;
+import com.pinyougou.mapper.SpecificationOptionMapper;
+import com.pinyougou.pojo.SpecificationOption;
 import com.pinyougou.pojo.TypeTemplate;
 import com.pinyougou.mapper.TypeTemplateMapper;
 import com.pinyougou.service.TypeTemplateService;
@@ -32,6 +35,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Autowired
     private TypeTemplateMapper typeTemplateMapper;
+
+    @Autowired
+    private SpecificationOptionMapper specificationOptionMapper;
 
     /**
      * 添加方法
@@ -126,9 +132,28 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Override
     public List<Map<String, Object>> findAllByIdAndName() {
-        try{
+        try {
             return typeTemplateMapper.findAllByIdAndName();
-        }catch(Exception ex){
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public List<Map> findSpecByTemplateId(Long id) {
+        try {
+            TypeTemplate typeTemplate = findOne(id);
+            String specIds = typeTemplate.getSpecIds();
+            List<Map> specList = JSON.parseArray(specIds, Map.class);
+            for (Map map : specList) {
+                Long specId = Long.valueOf(map.get("id").toString());
+                SpecificationOption so = new SpecificationOption();
+                so.setSpecId(specId);
+                List<SpecificationOption> options = specificationOptionMapper.select(so);
+                map.put("options", options);
+            }
+            return specList;
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }

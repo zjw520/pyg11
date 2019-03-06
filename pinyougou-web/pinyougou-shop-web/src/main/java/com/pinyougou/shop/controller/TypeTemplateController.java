@@ -73,5 +73,10 @@ public class TypeTemplateController {
         return one;
     }
 
+    @GetMapping("/findSpecByTemplateId")
+    public List<Map> findSpecByTemplateId(Long id){
+        return typeTemplateService.findSpecByTemplateId(id);
+    }
+
 
 }
