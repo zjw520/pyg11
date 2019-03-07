@@ -6,8 +6,7 @@
 <mapper namespace="com.pinyougou.mapper.GoodsMapper">
 
 	<select id="findAll" resultType="map">
-		select id ,goods_name as goodsName,price,audit_status as auditStatus,category1_id as category1Id,category2_id as category2Id,category3_id as category3Id from tb_goods
-		<where>
+		select id ,goods_name as goodsName,price,audit_status as auditStatus,category1_id as category1Id,category2_id as category2Id,category3_id as category3Id from tb_goods where is_delete is null
 			<if test="sellerId != null and sellerId != ''">
 				and seller_id = #{sellerId}
 			</if>
@@ -17,7 +16,27 @@
 			<if test="auditStatus !=null and auditStatus != ''">
 				and audit_status = #{auditStatus}
 			</if>
-		</where>
 		order by id asc
 	</select>
+
+	<update id="updateAll">
+		update tb_goods set audit_status = #{status} where id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateDeleteStatus">
+		update tb_goods set is_delete = #{status} where id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateMarketable">
+		update tb_goods set is_marketable = #{status} where id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</update>
 </mapper>

@@ -163,14 +163,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     public void deleteAll(Serializable[] ids) {
         try {
-            // 创建示范对象
-            Example example = new Example(Goods.class);
-            // 创建条件对象
-            Example.Criteria criteria = example.createCriteria();
-            // 创建In条件
-            criteria.andIn("id", Arrays.asList(ids));
-            // 根据示范对象删除
-            goodsMapper.deleteByExample(example);
+            goodsMapper.updateDeleteStatus(ids,"1");
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -223,6 +216,24 @@ public class GoodsServiceImpl implements GoodsService {
                 map.put("category3Name", itemCat3 != null ? itemCat3.getName() : "");
             }
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void updateAll(Long[] ids, String status) {
+        try {
+            goodsMapper.updateAll(ids, status);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void updateMarketable(Long[] ids, String status) {
+        try {
+            goodsMapper.updateMarketable(ids, status);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

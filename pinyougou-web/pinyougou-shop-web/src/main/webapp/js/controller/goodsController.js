@@ -165,10 +165,31 @@ app.controller('goodsController', function ($scope, $controller, baseService) {
     }
 
 
+    $scope.updateMarketable = function (status) {
+        if ($scope.ids.length > 0){
+            baseService.sendGet("/goods/updateMarketable", "ids=" +
+                $scope.ids + "&status=" + status)
+                .then(function(response){
+                    if (response.data){
+                        alert("操作成功！");
+                        /** 重新加载数据 */
+                        $scope.reload();
+                        /** 清空ids数组 */
+                        $scope.ids = [];
+                    }else{
+                        alert("操作失败！");
+                    }
+                });
+        }else{
+            alert("请选择要操作的商品！");
+        }
+
+    }
+
 
     //spec:网络 optionName:移动3G
     $scope.createItems = function () {
-        $scope.goods.items = [{spec: {}, price: 0, num: 9999, status : '0', isDefault: '0'}]
+        $scope.goods.items = [{spec: {}, price: 0, num: 9999, status: '0', isDefault: '0'}]
         var specItems = $scope.goods.goodsDesc.specificationItems;
         for (i = 0; i < specItems.length; i++) {
             var obj = specItems[i]

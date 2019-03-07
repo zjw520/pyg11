@@ -23,8 +23,14 @@
 		 function setIFrameHeight(){
 			 $("#iframe").height($(".content-wrapper").height() - 5);
 		 }
-	</script>    
- 
+
+	</script>
+
+    <script type="text/javascript">
+        if (top.location != location) {
+            top.location.href = location.href;
+        }
+    </script>
 </head>
 
 <body class="hold-transition skin-green sidebar-mini" ng-app="pinyougou" ng-controller="indexController" ng-init="showLoginName()">
