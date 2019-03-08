@@ -12,6 +12,7 @@ import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
@@ -32,12 +33,17 @@ public class ContentServiceImpl implements ContentService {
     @Autowired
     private ContentMapper contentMapper;
 
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 添加方法
      */
     public void save(Content content) {
         try {
             contentMapper.insertSelective(content);
+            redisTemplate.delete("content");
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -49,6 +55,7 @@ public class ContentServiceImpl implements ContentService {
     public void update(Content content) {
         try {
             contentMapper.updateByPrimaryKeySelective(content);
+            redisTemplate.delete("content");
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -60,6 +67,7 @@ public class ContentServiceImpl implements ContentService {
     public void delete(Serializable id) {
         try {
             contentMapper.deleteByPrimaryKey(id);
+            redisTemplate.delete("content");
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -118,6 +126,53 @@ public class ContentServiceImpl implements ContentService {
                         }
                     });
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+//    @Override
+//    public List<Content> findByCategoryId(Long id) {
+//        // 创建示范对象
+//        Example example = new Example(Content.class);
+//        // 创建查询条件对象
+//        Example.Criteria criteria = example.createCriteria();
+//        // 添加等于条件 category_id = categoryId
+//        criteria.andEqualTo("categoryId", id);
+//        // 添加等于条件 status = 1
+//        criteria.andEqualTo("status", "1");
+//        // 排序(升序) order by sort_order asc
+//        example.orderBy("sortOrder").asc();
+//        return contentMapper.selectByExample(example);
+//    }
+
+    @Override
+    public List<Content> findByCategoryId(Long id) {
+        List<Content> contentList = null;
+        try {
+            contentList = (List<Content>) redisTemplate.boundValueOps("content").get();
+            if (contentList != null && contentList.size() > 0) {
+                return contentList;
+            }
+        } catch (Exception ex) {
+        }
+
+        try {
+//             创建查询条件对象
+            Example example = new Example(Content.class);
+            Example.Criteria criteria = example.createCriteria();
+            // 添加等于条件 category_id = categoryId
+            criteria.andEqualTo("categoryId", id);
+            // 添加等于条件 status = 1
+            criteria.andEqualTo("status", "1");
+            // 排序(升序) order by sort_order asc
+            example.orderBy("sortOrder").asc();
+            contentList = contentMapper.selectByExample(example);
+            try {
+                redisTemplate.boundValueOps("content").set(contentList);
+            } catch (Exception ex) {
+            }
+            return contentList;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
