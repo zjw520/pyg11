@@ -155,6 +155,7 @@ public class ContentServiceImpl implements ContentService {
                 return contentList;
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         try {
@@ -171,6 +172,7 @@ public class ContentServiceImpl implements ContentService {
             try {
                 redisTemplate.boundValueOps("content").set(contentList);
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
             return contentList;
         } catch (Exception ex) {

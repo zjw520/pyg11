@@ -674,12 +674,12 @@
                     <ol class="carousel-indicators">
                         <!-- 下面圆点控制 -->
                         <li data-target="#myCarousel"
-                            ng-repeat="content in contentList"
+                            ng-repeat="content in dataList"
                             data-slide-to="{{$index}}"
                             class="{{$index == 0 ? 'active' : ''}}"></li>
                     </ol>
                     <div class="carousel-inner">
-                        <div ng-repeat="content in contentList"
+                        <div ng-repeat="content in dataList"
                              class="{{$index == 0 ? 'active' : ''}} item">
                             <a href="{{content.url}}"><img src="{{content.pic}}"/></a>
                         </div>
