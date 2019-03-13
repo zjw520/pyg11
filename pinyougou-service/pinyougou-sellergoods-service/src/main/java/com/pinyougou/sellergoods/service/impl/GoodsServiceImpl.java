@@ -5,12 +5,12 @@ import com.alibaba.fastjson.JSON;
 import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.mapper.*;
 import com.pinyougou.pojo.Goods;
+import com.pinyougou.pojo.GoodsDesc;
 import com.pinyougou.pojo.Item;
 import com.pinyougou.pojo.ItemCat;
 import com.pinyougou.service.GoodsService;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -20,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
 
 /**
  * GoodsServiceImpl 服务接口实现类
@@ -163,7 +161,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     public void deleteAll(Serializable[] ids) {
         try {
-            goodsMapper.updateDeleteStatus(ids,"1");
+            goodsMapper.updateDeleteStatus(ids, "1");
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -234,6 +232,38 @@ public class GoodsServiceImpl implements GoodsService {
     public void updateMarketable(Long[] ids, String status) {
         try {
             goodsMapper.updateMarketable(ids, status);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public Map<String, Object> getGoods(Long goodsId) {
+        try {
+            Map<String, Object> dataModel = new HashMap<>();
+            Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
+            dataModel.put("goods", goods);
+            GoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(goodsId);
+            dataModel.put("goodsDesc", goodsDesc);
+            if (goods != null && goods.getCategory3Id() != null) {
+                String itemCat1 = itemCatMapper.selectByPrimaryKey(goods.getCategory1Id()).getName();
+                String itemCat2 = itemCatMapper.selectByPrimaryKey(goods.getCategory2Id()).getName();
+                String itemCat3 = itemCatMapper.selectByPrimaryKey(goods.getCategory3Id()).getName();
+                dataModel.put("itemCat1", itemCat1);
+                dataModel.put("itemCat2", itemCat2);
+                dataModel.put("itemCat3", itemCat3);
+            }
+
+            Example example = new Example(Item.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("status", "1");
+            criteria.andEqualTo("goodsId", goodsId);
+            example.orderBy("isDefault").desc();
+            List<Item> itemList = itemMapper.selectByExample(example);
+            dataModel.put("itemList", JSON.toJSONString(itemList));
+
+
+            return dataModel;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
