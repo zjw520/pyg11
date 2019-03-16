@@ -269,4 +269,17 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
+    @Override
+    public List<Item> findItemByGoodsId(Long[] ids) {
+
+        try {
+            Example example = new Example(Item.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andIn("goodsId",Arrays.asList(ids));
+            return itemMapper.selectByExample(example);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }

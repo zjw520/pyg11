@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:jms.properties"/>
+
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="activeMQConnectionFactory">
+        <property name="brokerURL" value="${brokerURL}"/>
+    </bean>
+
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory" id="singleConnectionFactory">
+        <property name="targetConnectionFactory" ref="activeMQConnectionFactory"/>
+    </bean>
+
+    <bean class="org.springframework.jms.core.JmsTemplate" id="jmsTemplate">
+        <property name="connectionFactory" ref="singleConnectionFactory"/>
+        <property name="defaultDestination" ref="solrQueue"/>
+    </bean>
+
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="solrQueue">
+        <constructor-arg value="solr.queue"/>
+    </bean>
+
+    <bean id="solrDeleteQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="solr.delete.queue"/>
+    </bean>
+
+    <bean id="pageTopic" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="page.topic"/>
+    </bean>
+
+    <bean id="pageDeleteTopic" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="page.delete.topic"/>
+    </bean>
+
+</beans>

@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.service.ItemSearchService;
 import com.pinyougou.solr.SolrItem;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -13,6 +14,7 @@ import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.core.query.result.ScoredPage;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -119,5 +121,28 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             data.put("total", scoredPage.getTotalElements());
         }
         return data;
+    }
+
+    @Override
+    public void saveOrUpdate(List<SolrItem> solrItems) {
+        UpdateResponse updateResponse = solrTemplate.saveBeans(solrItems);
+        if(updateResponse.getStatus()==0){
+            solrTemplate.commit();
+        }else{
+            solrTemplate.rollback();
+        }
+    }
+
+    @Override
+    public void delete(List<Long> goodsIds) {
+        Query query = new SimpleQuery();
+        Criteria criteria = new Criteria("goodsId").in(goodsIds);
+        query.addCriteria(criteria);
+        UpdateResponse updateResponse = solrTemplate.delete(query);
+        if(updateResponse.getStatus()==0){
+            solrTemplate.commit();
+        }else{
+            solrTemplate.rollback();
+        }
     }
 }

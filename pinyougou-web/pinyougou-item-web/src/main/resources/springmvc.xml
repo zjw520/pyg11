@@ -20,6 +20,7 @@
 
     <dubbo:application name="pinyougou-item-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.126.128:2181"/>
-    <dubbo:annotation package="com.pinyougou.item.controller"/>
+    <dubbo:annotation package="com.pinyougou.item"/>
+
 
 </beans>
