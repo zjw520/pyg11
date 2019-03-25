@@ -31,4 +31,9 @@ public interface SeckillOrderService {
 	/** 多条件分页查询 */
 	List<SeckillOrder> findByPage(SeckillOrder seckillOrder, int page, int rows);
 
+    void saveOrderFromRedis(Long id, String username);
+
+	SeckillOrder findSeckillOrderFromRedis(String userId);
+
+	void saveOrder(String userId, String transaction_id);
 }

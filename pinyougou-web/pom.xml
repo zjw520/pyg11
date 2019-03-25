@@ -19,6 +19,8 @@
         <module>pinyougou-item-web</module>
         <module>pinyougou-sms-web</module>
         <module>pinyougou-user-web</module>
+        <module>pinyougou-cart-web</module>
+        <module>pinyougou-seckill-web</module>
     </modules>
 
     <properties>

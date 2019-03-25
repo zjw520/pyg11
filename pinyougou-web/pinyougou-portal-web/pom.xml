@@ -13,4 +13,11 @@
   <properties>
     <port>9103</port>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jasig.cas.client</groupId>
+      <artifactId>cas-client-core</artifactId>
+    </dependency>
+  </dependencies>
 </project>

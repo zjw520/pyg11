@@ -28,4 +28,10 @@ app.controller('userController', function ($scope, baseService) {
             alert("请输入手机号码")
         }
     }
+
+    $scope.showName = function(){
+        baseService.sendGet("/user/showName").then(function (response) {
+            $scope.loginName = response.data.loginName;
+        })
+    }
 });

@@ -98,4 +98,14 @@ public class SeckillGoodsServiceImpl implements SeckillGoodsService {
 		}
 	}
 
+	@Override
+	public List<SeckillGoods> findSeckillGoods() {
+		return null;
+	}
+
+	@Override
+	public SeckillGoods findOneFromRedis(Long id) {
+		return null;
+	}
+
 }

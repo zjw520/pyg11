@@ -1,5 +1,7 @@
 /** 定义搜索控制器 */
-app.controller("searchController", function ($scope, $sce, $location,baseService) {
+app.controller("searchController", function ($scope, $sce, $location,baseService,$controller) {
+
+    $controller('baseController',{$scope:$scope})
 
     $scope.searchParam = {keywords: "", category: "", brand: "", price: "", spec: {}, page: 1, rows: 20,sortField:'',sort:''}
 

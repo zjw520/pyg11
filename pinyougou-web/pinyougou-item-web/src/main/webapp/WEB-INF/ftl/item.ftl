@@ -12,6 +12,7 @@
     <script src="/plugins/angularjs/angular.min.js"></script>
     <script src="/js/base.js"></script>
     <script src="/js/controller/itemController.js"></script>
+    <script src="/js/controller/baseController.js"></script>
 
     <script type="text/javascript">
         var itemList = ${itemList};
@@ -20,7 +21,7 @@
 
 </head>
 
-<body ng-app="pinyougou" ng-controller="itemController" ng-init="num=1;loadSku();">
+<body ng-app="pinyougou" ng-controller="itemController" ng-init="num=1;loadSku();loadUsername();">
 
 <#include "header.ftl"/>
 

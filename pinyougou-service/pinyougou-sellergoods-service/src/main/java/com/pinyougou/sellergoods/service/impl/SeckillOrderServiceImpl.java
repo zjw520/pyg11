@@ -98,4 +98,19 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 		}
 	}
 
+	@Override
+	public void saveOrderFromRedis(Long id, String username) {
+
+	}
+
+	@Override
+	public SeckillOrder findSeckillOrderFromRedis(String userId) {
+		return null;
+	}
+
+	@Override
+	public void saveOrder(String userId, String transaction_id) {
+
+	}
+
 }

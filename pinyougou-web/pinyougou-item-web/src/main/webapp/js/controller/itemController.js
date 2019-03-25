@@ -1,5 +1,8 @@
 /** 商品详细页（控制器）*/
-app.controller('itemController', function ($scope) {
+app.controller('itemController', function ($scope,$controller) {
+
+    $controller("baseController",{$scope:$scope})
+
     /** 定义购买数量操作方法 */
     $scope.addNum = function (x) {
 

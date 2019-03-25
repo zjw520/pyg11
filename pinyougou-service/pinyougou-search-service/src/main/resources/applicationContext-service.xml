@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <dubbo:application name="pinyougou-search-service"/>
-    <dubbo:registry protocol="zookeeper" address="192.168.126.128:2181"/>
+    <dubbo:registry protocol="zookeeper" address="192.168.12.131:2181"/>
     <dubbo:protocol name="dubbo" port="20882"/>
     <dubbo:annotation package="com.pinyougou.search.service.impl"/>
 </beans>
