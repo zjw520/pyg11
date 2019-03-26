@@ -10,25 +10,26 @@ import java.io.Serializable;
  */
 public interface CitiesService {
 
-	/** 添加方法 */
-	void save(Cities cities);
+//	/** 添加方法 */
+//	void save(Cities cities);
+//
+//	/** 修改方法 */
+//	void update(Cities cities);
+//
+//	/** 根据主键id删除 */
+//	void delete(Serializable id);
+//
+//	/** 批量删除 */
+//	void deleteAll(Serializable[] ids);
+//
+//	/** 根据主键id查询 */
+//	Cities findOne(Serializable id);
+//
+//	/** 查询全部 */
+//	List<Cities> findAll();
+//
+//	/** 多条件分页查询 */
+//	List<Cities> findByPage(Cities cities, int page, int rows);
 
-	/** 修改方法 */
-	void update(Cities cities);
-
-	/** 根据主键id删除 */
-	void delete(Serializable id);
-
-	/** 批量删除 */
-	void deleteAll(Serializable[] ids);
-
-	/** 根据主键id查询 */
-	Cities findOne(Serializable id);
-
-	/** 查询全部 */
-	List<Cities> findAll();
-
-	/** 多条件分页查询 */
-	List<Cities> findByPage(Cities cities, int page, int rows);
-
+    List<Cities> findbyCityId(String id);
 }
