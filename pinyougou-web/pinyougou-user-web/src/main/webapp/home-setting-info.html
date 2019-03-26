@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:data="http://www.w3.org/1999/xhtml" xmlns:checked="http://www.w3.org/1999/xhtml" xmlns:1 xmlns:1>
 <head>
     <meta charset="UTF-8"/>
     <title>设置-个人信息</title>
     <link rel="icon" href="/assets/img/favicon.ico"/>
-
     <link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
-    
 	<link rel="stylesheet" type="text/css" href="/css/pages-seckillOrder.css"/>
+	<script src="plugins/angularjs/angular.min.js"></script>
+	<script src="My97DatePicker/WdatePicker.js"></script>
+	<script src="js/base.js"></script>
+	<script src="js/service/baseService.js"></script>
+	<script src="js/controller/userController.js"></script>
+
 
 </head>
 
-<body>
+<body ng-app="pinyougou"
+	  ng-controller="userController"
+	  ng-init="showName();findUser()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -21,8 +27,11 @@
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+						<li class="f-item" ng-if="loginName">{{loginName}}品优购欢迎您！ &nbsp; <a
+								href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a></li>
+						<li class="f-item" ng-if="!loginName">请<a href="http://sso.pinyougou.com/?service={{redirectUrl}}">登录</a>　<span>
+						<a href="http://user.pinyougou.com/register.html">免费注册</a>
+					</span></li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -221,14 +230,14 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputName" class="control-label">昵称：</label>
                                         <div class="controls">
-                                            <input type="text" id="inputName" name="email" placeholder="昵称">
+                                            <input type="text" id="inputName" ng-model="userData.nickName" name="email" placeholder="昵称">
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputGender" class="control-label">性别：</label>
+                                        <label  class="control-label">性别：</label>
                                         <div class="controls">
-                                            <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="gender" value="1"><span>男</span>
+                                            <label data-toggle="radio" class="radio-pretty inline ">
+                                            <input type="radio" name="gender" checked="{{userData.sex == 1 ? 'checked':''}} "value="1"><span>男</span>
                                         </label>
                                             <label data-toggle="radio" class="radio-pretty inline">
                                             <input type="radio" name="gender" value="2"><span>女</span>
@@ -236,19 +245,17 @@ $(function(){
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputPassword" class="control-label">生日：</label>
+                                        <label class="control-label">生日：</label>
                                         <div class="controls">
-                                            <select id="select_year2" rel="1990"></select>年
-                                            <select id="select_month2" rel="4"></select>月
-                                            <select id="select_day2" rel="3"></select>日
+                                           <input type="text"  class="Wdate" ng-model="userData.birthday"  onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})">
                                         </div>
                                     </div>
 
 
                                     <div class="control-group">
-                                        <label for="inputPassword" class="control-label">所在地：</label>
+                                        <label class="control-label">所在地：</label>
                                         <div class="controls">
-                                            <div data-toggle="distpicker">
+                                            <div data-toggle="distpicker" >
                                                 <div class="form-group area">
                                                     <select class="form-control" id="province1"></select>
                                                 </div>
@@ -262,7 +269,7 @@ $(function(){
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label for="inputJob" class="control-label">职业：</label>
+                                        <label  class="control-label">职业：</label>
                                         <div class="controls"><span class="sui-dropdown dropdown-bordered select"><span class="dropdown-inner"><a role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
                                                 <input name="job" type="hidden" data-rules="required"><i class="caret"></i><span>请选择</span></a>
                                             <ul id="menu4" role="menu" aria-labelledby="drop4" class="sui-dropdown-menu">

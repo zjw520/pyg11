@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,5 +56,17 @@ public class UserController {
         Map<String, String> data = new HashMap<>();
         data.put("loginName", name);
         return data;
+    }
+
+    @GetMapping("/findUser")
+    public User findUser(HttpServletRequest request){
+        try {
+            String username = request.getRemoteUser();
+            User user = userService.findUser(username);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

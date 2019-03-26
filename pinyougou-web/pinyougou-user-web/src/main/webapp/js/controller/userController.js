@@ -1,7 +1,8 @@
 /** 定义控制器层 */
-app.controller('userController', function ($scope, baseService) {
+app.controller('userController', function ($scope,$controller , baseService) {
 
-    $scope.user = {}
+
+    $scope.user = {};
     $scope.save = function () {
         if ($scope.user.password != $scope.password) {
             alert("密码不一致,请重新输入!");
@@ -31,7 +32,18 @@ app.controller('userController', function ($scope, baseService) {
 
     $scope.showName = function(){
         baseService.sendGet("/user/showName").then(function (response) {
+            // 定义重定向URL
+            $scope.redirectUrl = window.encodeURIComponent(location.href);
             $scope.loginName = response.data.loginName;
         })
+    };
+
+
+    $scope.findUser = function () {
+        baseService.sendGet("/user/findUser").then(function (response) {
+            $scope.userData=response.data;
+        })
     }
+
+
 });
