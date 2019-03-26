@@ -38,7 +38,7 @@ app.controller('userController', function ($scope, baseService) {
     }
 
     $scope.findAll = function () {
-        baseService.sendGet("/user/findAll").then(function (response) {
+        baseService.sendGet("/address/findAll").then(function (response) {
             $scope.adressList = response.data.addressList;
             $scope.pList = response.data.provinceList;
 
@@ -85,7 +85,7 @@ app.controller('userController', function ($scope, baseService) {
     })
 
   $scope.updataDefaluStatus = function (entity) {
-        baseService.sendPost("/user/addressDefaultStatus",entity).then(function (response) {
+        baseService.sendPost("/address/addressDefaultStatus",entity).then(function (response) {
             if (response.data){
                 $scope.findAll();
 
@@ -100,15 +100,29 @@ app.controller('userController', function ($scope, baseService) {
         if(entity.id){
             url="/updateAddress";
         }
-        baseService.sendPost("/user"+url,entity).then(function (reponse) {
+        baseService.sendPost("/address"+url,entity).then(function (reponse) {
             if(reponse.data){
 
                 alert("保存成功")
+                $scope.findAll();
 
             }else{
                 alert("保存失败")
             }
         })
+    }
+    $scope.deleteAdressById = function (id) {
+        baseService.sendGet("/address/delete","id="+id).then(function (response) {
+            if (response.data) {
+                alert("删除成功");
+                $scope.findAll();
+
+            }else{
+                alert("删除失败");
+            }
+        })
+
+
     }
 
 });

@@ -224,7 +224,7 @@ $(function(){
                                         <td>
 
                                             <a data-toggle="modal" data-target=".edit" data-keyboard="false"  ng-click="show(ad);">编辑</a>
-                                            <a href="#" ng-if="ad.is_default == 0" >删除</a>
+                                            <a href="#" ng-if="ad.is_default == 0"  ng-click="deleteAdressById(ad.id)">删除</a>
                                             <span class="base" ng-if="ad.is_default == 1" ><a href="" >默认地址</a> </span>
                                             <span class="base" ng-if="ad.is_default == 0"><a href="" ng-click="updataDefaluStatus(ad)" >设定默认地址</a> </span>
                                         </td>
