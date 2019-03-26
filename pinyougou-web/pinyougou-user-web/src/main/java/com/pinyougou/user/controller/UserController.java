@@ -66,58 +66,5 @@ public class UserController {
         data.put("loginName", name);
         return data;
     }
-    @GetMapping("/findAll")
-    public Map<String,Object> findAll(){
-        Map<String, Object> map = new HashMap<>();
 
-        try {
-            String userId = request.getRemoteUser();
-            List<Provinces> provinceList = addressService.findProvinceList();
-            List<Map<String,String>> addressList = addressService.findbyUserId(userId);
-            map.put("provinceList",provinceList);
-            map.put("addressList",addressList);
-            return map;
-        } catch (Exception e) {
-            return null;
-        }
-
-
-    }
-    @PostMapping("/addressDefaultStatus")
-    public boolean addressDefaultStatus(@RequestBody Address address){
-
-        try {
-            addressService.updatestatus(address);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-
-    }
-    @PostMapping("/saveAddress")
-    public boolean saveOrUpdareAddress(@RequestBody Address address){
-        if (address!=null){
-            try {
-                String remoteUser = request.getRemoteUser();
-                address.setUserId(remoteUser);
-                return   addressService.saveOrUpdareAddress(address);
-            } catch (Exception e) {
-                return false;
-            }
-        }else{
-            return false;
-        }
-
-    }
-    @PostMapping("/updateAddress")
-    public boolean update(@RequestBody Address address){
-        try {
-            addressService.update(address);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-
-
-    }
 }
