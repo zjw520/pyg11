@@ -67,4 +67,15 @@ public class UserController {
         return data;
     }
 
+    @GetMapping("/findUser")
+    public User findUser(HttpServletRequest request){
+        try {
+            String username = request.getRemoteUser();
+            User user = userService.findUser(username);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

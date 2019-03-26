@@ -35,6 +35,13 @@ app.controller('userController', function ($scope, baseService) {
             $scope.redirectUrl = window.encodeURIComponent(location.href);
             $scope.loginName = response.data.loginName;
         })
+    };
+
+
+    $scope.findUser = function () {
+        baseService.sendGet("/user/findUser").then(function (response) {
+            $scope.userData=response.data;
+        })
     }
 
     $scope.findAll = function () {
@@ -124,5 +131,7 @@ app.controller('userController', function ($scope, baseService) {
 
 
     }
+
+
 
 });

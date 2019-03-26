@@ -1,6 +1,7 @@
 package com.pinyougou.pojo;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.*;

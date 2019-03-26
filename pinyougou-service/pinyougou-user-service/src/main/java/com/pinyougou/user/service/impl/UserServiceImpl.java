@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -169,5 +171,14 @@ public class UserServiceImpl implements UserService {
         String sysCode = redisTemplate.boundValueOps(phone).get();
         return StringUtils.isNoneBlank(sysCode) && sysCode.equals(code);
     }
+
+    @Override
+    public User findUser(String username) {
+        User user = new User();
+        user.setUsername(username);
+        User user2 = userMapper.selectOne(user);
+        return user2;
+    }
+
 
 }

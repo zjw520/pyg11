@@ -34,4 +34,6 @@ public interface UserService {
 	boolean sendCode(String phone);
 
 	boolean checkSmsCode(String phone, String smsCode);
+
+    User findUser(String username);
 }
