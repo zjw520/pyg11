@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5">
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
 
-	<servlet>
-		<servlet-name>DispatcherServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:springmvc.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>DispatcherServlet</servlet-name>
-		<url-pattern>*.html</url-pattern>
-	</servlet-mapping>
 
 	<!--############## CAS单点登录配置  开始 ################-->
 	<!-- 配置单点退出过滤器 (可选配置) -->
@@ -35,7 +22,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- 配置身份认证过滤器(不需要跳转到CAS登录系统) -->
+	<!-- 配置身份认证过滤器(不需要跳转到CAS登录系统，只是用来获取ST服务票据，再获取用户名) -->
 	<filter>
 		<filter-name>anonAuthenticationFilter</filter-name>
 		<filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
@@ -45,11 +32,12 @@
 			<param-value>http://sso.pinyougou.com</param-value>
 		</init-param>
 		<init-param>
-			<!-- 配置服务名称 -->
+			<!-- 配置服务名称-->
 			<param-name>serverName</param-name>
 			<param-value>http://cart.pinyougou.com</param-value>
 		</init-param>
-		<!-- 配置gateway=true”时，启用异步方式认证 -->
+		<!-- 配置gateway网关的参数：异步获取ST服务票据，
+			如果ST服务票据获取不到也不需要重定向到CAS服务端，如果能够获取ST，就获取用户名 -->
 		<init-param>
 			<param-name>gateway</param-name>
 			<param-value>true</param-value>
@@ -115,6 +103,36 @@
 	<!--############## CAS单点登录配置  结束 ################-->
 
 
+	<!-- 配置Spring MVC前端控制器(核心控制器) -->
+	<servlet>
+		<servlet-name>pinyougou</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>pinyougou</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<!-- 配置全局编码过滤器 POST请求 -->
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 欢迎文件列表 -->
 	<welcome-file-list>
 		<welcome-file>cart.html</welcome-file>
 	</welcome-file-list>
